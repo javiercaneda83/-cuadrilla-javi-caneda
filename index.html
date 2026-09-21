@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#111111">
+
+  <meta name="description" content="Gestión de la Cuadrilla Javi Caneda">
+
+  <link rel="manifest" href="manifest.json">
+
+  <title>Cuadrilla Javi Caneda</title>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+    body {
+
+      margin: 0;
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      background: #f4f4f4;
+
+      color: #222;
+
+    }
+
+    header {
+
+      background: #111;
+
+      color: white;
+
+      padding: 22px 18px;
+
+      text-align: center;
+
+    }
+
+    header h1 {
+
+      margin: 0;
+
+      font-size: 24px;
+
+    }
+
+    header p {
+
+      margin: 6px 0 0;
+
+      opacity: .75;
+
+    }
+
+    .container {
+
+      padding: 18px;
+
+      max-width: 700px;
+
+      margin: auto;
+
+    }
+
+    .card {
+
+      background: white;
+
+      border-radius: 16px;
+
+      padding: 18px;
+
+      margin-bottom: 15px;
+
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+
+    }
+
+    .card h2 {
+
+      margin-top: 0;
+
+    }
+
+    button {
+
+      border: 0;
+
+      border-radius: 12px;
+
+      padding: 13px 16px;
+
+      background: #111;
+
+      color: white;
+
+      font-size: 15px;
+
+      cursor: pointer;
+
+      margin-top: 8px;
+
+    }
+
+    button.secondary {
+
+      background: #777;
+
+    }
+
+    input, textarea, select {
+
+      width: 100%;
+
+      padding: 12px;
+
+      margin: 7px 0 12px;
+
+      border: 1px solid #ddd;
+
+      border-radius: 10px;
+
+      font-size: 16px;
+
+    }
+
+    .menu {
+
+      display: grid;
+
+      grid-template-columns: repeat(2, 1fr);
+
+      gap: 10px;
+
+      margin-bottom: 18px;
+
+    }
+
+    .menu button {
+
+      margin: 0;
+
+      min-height: 65px;
+
+    }
+
+    .event {
+
+      border-left: 4px solid #111;
+
+      padding-left: 12px;
+
+      margin-bottom: 15px;
+
+    }
+
+    .member {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      border-bottom: 1px solid #eee;
+
+      padding: 12px 0;
+
+    }
+
+    .member:last-child {
+
+      border-bottom: 0;
+
+    }
+
+    .hidden {
+
+      display: none;
+
+    }
+
+    .success {
+
+      color: #16833b;
+
+      font-weight: bold;
+
+    }
+
+    .danger {
+
+      color: #c62828;
+
+      font-weight: bold;
+
+    }
+
+    footer {
+
+      text-align: center;
+
+      padding: 25px;
+
+      color: #777;
+
+      font-size: 13px;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+  <h1>Cuadrilla Javi Caneda</h1>
+
+  <p>Gestión de la cuadrilla</p>
+
+</header>
+
+<div class="container">
+
+  <div class="menu">
+
+    <button onclick="mostrar('inicio')">🏠 Inicio</button>
+
+    <button onclick="mostrar('eventos')">📅 Eventos</button>
+
+    <button onclick="mostrar('cuadrilla')">👥 Cuadrilla</button>
+
+    <button onclick="mostrar('avisos')">📢 Avisos</button>
+
+  </div>
+
+  <section id="inicio">
+
+    <div class="card">
+
+      <h2>Bienvenido 👋</h2>
+
+      <p>Bienvenido a la aplicación de la <strong>Cuadrilla Javi Caneda</strong>.</p>
+
+      <p>Desde aquí podrás consultar eventos, gestionar la cuadrilla y recibir avisos.</p>
+
+    </div>
+
+    <div class="card">
+
+      <h2>Próximo evento</h2>
+
+      <div id="proximoEvento">
+
+        No hay eventos registrados.
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section id="eventos" class="hidden">
+
+    <div class="card">
+
+      <h2>📅 Eventos</h2>
+
+      <div id="listaEventos">
+
+        No hay eventos todavía.
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>➕ Añadir evento</h2>
+
+      <label>Nombre</label>
+
+      <input id="eventoNombre" placeholder="Ej.: Ensayo general">
+
+      <label>Fecha</label>
+
+      <input id="eventoFecha" type="date">
+
+      <label>Hora</label>
+
+      <input id="eventoHora" type="time">
+
+      <label>Lugar</label>
+
+      <input id="eventoLugar" placeholder="Lugar del evento">
+
+      <button onclick="agregarEvento()">Guardar evento</button>
+
+    </div>
+
+  </section>
+
+  <section id="cuadrilla" class="hidden">
+
+    <div class="card">
+
+      <h2>👥 Cuadrilla</h2>
+
+      <div id="listaMiembros">
+
+        No hay miembros registrados.
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>➕ Añadir miembro</h2>
+
+      <label>Nombre</label>
+
+      <input id="miembroNombre" placeholder="Nombre y apellidos">
+
+      <label>Teléfono</label>
+
+      <input id="miembroTelefono" type="tel" placeholder="Teléfono">
+
+      <button onclick="agregarMiembro()">Añadir a la cuadrilla</button>
+
+    </div>
+
+  </section>
+
+  <section id="avisos" class="hidden">
+
+    <div class="card">
+
+      <h2>📢 Avisos</h2>
+
+      <div id="listaAvisos">
+
+        No hay avisos.
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>➕ Nuevo aviso</h2>
+
+      <label>Mensaje</label>
+
+      <textarea id="avisoTexto" rows="4"
+
+        placeholder="Escribe aquí el aviso..."></textarea>
+
+      <button onclick="agregarAviso()">Publicar aviso</button>
+
+    </div>
+
+  </section>
+
+</div>
+
+<footer>
+
+  Cuadrilla Javi Caneda · V1
+
+</footer>
+
+<script>
+
+  let eventos = JSON.parse(localStorage.getItem("eventos")) || [];
+
+  let miembros = JSON.parse(localStorage.getItem("miembros")) || [];
+
+  let avisos = JSON.parse(localStorage.getItem("avisos")) || [];
+
+  function guardarDatos() {
+
+    localStorage.setItem("eventos", JSON.stringify(eventos));
+
+    localStorage.setItem("miembros", JSON.stringify(miembros));
+
+    localStorage.setItem("avisos", JSON.stringify(avisos));
+
+  }
+
+  function mostrar(seccion) {
+
+    document.querySelectorAll("section").forEach(function(elemento) {
+
+      elemento.classList.add("hidden");
+
+    });
+
+    document.getElementById(seccion).classList.remove("hidden");
+
+    actualizarTodo();
+
+  }
+
+  function agregarEvento() {
+
+    const nombre = document.getElementById("eventoNombre").value;
+
+    const fecha = document.getElementById("eventoFecha").value;
+
+    const hora = document.getElementById("eventoHora").value;
+
+    const lugar = document.getElementById("eventoLugar").value;
+
+    if (!nombre || !fecha) {
+
+      alert("Introduce al menos el nombre y la fecha.");
+
+      return;
+
+    }
+
+    eventos.push({
+
+      nombre: nombre,
+
+      fecha: fecha,
+
+      hora: hora,
+
+      lugar: lugar
+
+    });
+
+    guardarDatos();
+
+    document.getElementById("eventoNombre").value = "";
+
+    document.getElementById("eventoFecha").value = "";
+
+    document.getElementById("eventoHora").value = "";
+
+    document.getElementById("eventoLugar").value = "";
+
+    actualizarTodo();
+
+    alert("Evento guardado correctamente.");
+
+  }
+
+  function agregarMiembro() {
+
+    const nombre = document.getElementById("miembroNombre").value;
+
+    const telefono = document.getElementById("miembroTelefono").value;
+
+    if (!nombre) {
+
+      alert("Introduce el nombre del miembro.");
+
+      return;
+
+    }
+
+    miembros.push({
+
+      nombre: nombre,
+
+      telefono: telefono
+
+    });
+
+    guardarDatos();
+
+    document.getElementById("miembroNombre").value = "";
+
+    document.getElementById("miembroTelefono").value = "";
+
+    actualizarTodo();
+
+    alert("Miembro añadido.");
+
+  }
+
+  function agregarAviso() {
+
+    const texto = document.getElementById("avisoTexto").value;
+
+    if (!texto) {
+
+      alert("Escribe el aviso.");
+
+      return;
+
+    }
+
+    avisos.unshift({
+
+      texto: texto,
+
+      fecha: new Date().toLocaleDateString("es-ES")
+
+    });
+
+    guardarDatos();
+
+    document.getElementById("avisoTexto").value = "";
+
+    actualizarTodo();
+
+    alert("Aviso publicado.");
+
+  }
+
+  function eliminarEvento(index) {
+
+    if (confirm("¿Quieres eliminar este evento?")) {
+
+      eventos.splice(index, 1);
+
+      guardarDatos();
+
+      actualizarTodo();
+
+    }
+
+  }
+
+  function eliminarMiembro(index) {
+
+    if (confirm("¿Quieres eliminar este miembro?")) {
+
+      miembros.splice(index, 1);
+
+      guardarDatos();
+
+      actualizarTodo();
+
+    }
+
+  }
+
+  function eliminarAviso(index) {
+
+    if (confirm("¿Quieres eliminar este aviso?")) {
+
+      avisos.splice(index, 1);
+
+      guardarDatos();
+
+      actualizarTodo();
+
+    }
+
+  }
+
+  function actualizarTodo() {
+
+    const listaEventos = document.getElementById("listaEventos");
+
+    if (eventos.length === 0) {
+
+      listaEventos.innerHTML = "No hay eventos todavía.";
+
+    } else {
+
+      listaEventos.innerHTML = eventos.map(function(evento, index) {
+
+        return `
+
+          <div class="event">
+
+            <strong>${evento.nombre}</strong><br>
+
+            📅 ${evento.fecha}<br>
+
+            ${evento.hora ? "🕐 " + evento.hora + "<br>" : ""}
+
+            ${evento.lugar ? "📍 " + evento.lugar : ""}
+
+            <br>
+
+            <button class="secondary"
+
+              onclick="eliminarEvento(${index})">
+
+              Eliminar
+
+            </button>
+
+          </div>
+
+        `;
+
+      }).join("");
+
+    }
+
+    const listaMiembros = document.getElementById("listaMiembros");
+
+    if (miembros.length === 0) {
+
+      listaMiembros.innerHTML = "No hay miembros registrados.";
+
+    } else {
+
+      listaMiembros.innerHTML = miembros.map(function(miembro, index) {
+
+        return `
+
+          <div class="member">
+
+            <div>
+
+              <strong>${miembro.nombre}</strong><br>
+
+              ${miembro.telefono || "Sin teléfono"}
+
+            </div>
+
+            <button class="secondary"
+
+              onclick="eliminarMiembro(${index})">
+
+              ✕
+
+            </button>
+
+          </div>
+
+        `;
+
+      }).join("");
+
+    }
+
+    const listaAvisos = document.getElementById("listaAvisos");
+
+    if (avisos.length === 0) {
+
+      listaAvisos.innerHTML = "No hay avisos.";
+
+    } else {
+
+      listaAvisos.innerHTML = avisos.map(function(aviso, index) {
+
+        return `
+
+          <div class="card">
+
+            <strong>📢 ${aviso.fecha}</strong>
+
+            <p>${aviso.texto}</p>
+
+            <button class="secondary"
+
+              onclick="eliminarAviso(${index})">
+
+              Eliminar
+
+            </button>
+
+          </div>
+
+        `;
+
+      }).join("");
+
+    }
+
+    const proximoEvento = document.getElementById("proximoEvento");
+
+    if (eventos.length > 0) {
+
+      const evento = eventos[0];
+
+      proximoEvento.innerHTML = `
+
+        <strong>${evento.nombre}</strong><br>
+
+        📅 ${evento.fecha}
+
+        ${evento.hora ? "<br>🕐 " + evento.hora : ""}
+
+        ${evento.lugar ? "<br>📍 " + evento.lugar : ""}
+
+      `;
+
+    } else {
+
+      proximoEvento.innerHTML = "No hay eventos registrados.";
+
+    }
+
+  }
+
+  actualizarTodo();
+
+</script>
+
+<script>
+
+  if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", function() {
+
+      navigator.serviceWorker.register("sw.js");
+
+    });
+
+  }
+
+</script>
+
+</body>
+
+</html>
