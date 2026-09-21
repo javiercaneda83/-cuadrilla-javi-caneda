@@ -1,0 +1,21 @@
+{
+
+  "name": "Cuadrilla Javi Caneda",
+
+  "short_name": "Cuadrilla Javi",
+
+  "description": "Aplicación de gestión de la Cuadrilla Javi Caneda",
+
+  "start_url": "./index.html",
+
+  "display": "standalone",
+
+  "background_color": "#f4f4f4",
+
+  "theme_color": "#111111",
+
+  "orientation": "portrait",
+
+  "icons": []
+
+}
